@@ -8,6 +8,8 @@ from app.modules.config_center.router import router as config_center_router
 from app.modules.llm_gateway.router import router as llm_gateway_router
 from app.modules.prompt_registry.router import router as prompt_registry_router
 from app.modules.rag_service.router import router as rag_service_router
+from app.modules.secret_manager.router import router as secret_manager_router
+from app.modules.tool_registry.router import router as tool_registry_router
 from app.shared.config import get_settings
 from app.shared.database import init_db
 from app.shared.errors import APIError, api_error_handler, http_error_handler
@@ -30,6 +32,8 @@ app.include_router(config_center_router)
 app.include_router(llm_gateway_router)
 app.include_router(prompt_registry_router)
 app.include_router(rag_service_router)
+app.include_router(secret_manager_router)
+app.include_router(tool_registry_router)
 
 
 @app.get("/healthz")
