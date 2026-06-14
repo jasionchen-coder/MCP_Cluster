@@ -27,15 +27,17 @@ async def get_policy(
 ) -> tuple[LLMModelPolicy, LLMModelEndpoint, LLMModelProvider]:
     policy = (
         await session.execute(
-            select(LLMModelPolicy).where(
+            select(LLMModelPolicy)
+            .where(
                 LLMModelPolicy.project_id == project_id,
                 LLMModelPolicy.env == env,
                 LLMModelPolicy.task_type == task_type,
                 LLMModelPolicy.policy_id == model_policy_id,
                 LLMModelPolicy.enabled.is_(True),
             )
+            .order_by(LLMModelPolicy.id)
         )
-    ).scalar_one_or_none()
+    ).scalars().first()
     if policy is None:
         raise APIError(
             status_code=404,

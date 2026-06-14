@@ -53,6 +53,7 @@ class RagChunk(Base):
     chunk_text: Mapped[str] = mapped_column(Text, nullable=False)
     token_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     metadata_: Mapped[dict[str, Any]] = mapped_column("metadata", JSON, default=dict, nullable=False)
+    embedding: Mapped[list[float] | None] = mapped_column(JSON, nullable=True)
     vector_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
     score_hint: Mapped[float] = mapped_column(Float, default=0, nullable=False)
 

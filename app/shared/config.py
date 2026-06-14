@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     ark_default_model: str = "ep-xxxxxxxx"
     ark_topic_model: str = "ep-xxxxxxxx"
     ark_image_model: str = "doubao-seedream-4-5-251128"
+    rag_vector_enabled: bool = True
+    rag_embedding_dimension: int = 384
     log_level: str = "INFO"
 
 

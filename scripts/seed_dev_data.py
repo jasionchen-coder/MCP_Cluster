@@ -20,7 +20,7 @@ from app.modules.prompt_registry.service import (
 )
 from app.modules.rag_service.models import KnowledgeBase, RagDocument
 from app.modules.rag_service.schemas import DocumentCreate, KnowledgeBaseCreate
-from app.modules.rag_service.service import create_knowledge_base, ingest_document
+from app.modules.rag_service.service import backfill_embeddings, create_knowledge_base, ingest_document
 from app.shared.database import SessionLocal, init_db
 from app.shared.errors import APIError
 
@@ -88,6 +88,10 @@ async def _seed_llm_gateway() -> None:
         policies = [
             ("finance_high_quality", "finance_media", "generate_article", finance_ep_id),
             ("finance_json_stable", "finance_media", "generate_article", finance_ep_id),
+            ("finance_article_writer", "finance_media", "article_writer", finance_ep_id),
+            ("finance_article_reviser", "finance_media", "article_reviser", finance_ep_id),
+            ("finance_xhs_copy_writer", "finance_media", "xhs_copy_writer", finance_ep_id),
+            ("finance_image_prompt_json", "finance_media", "image_prompt_extractor", finance_ep_id),
             ("finance_topic_gen", "finance_media", "generate_topic", topic_ep_id),
             ("finance_image_gen", "finance_media", "generate_image", image_ep_id),
             ("voice_low_latency", "aigc_rtc", "voice_dialogue", voice_ep_id),
@@ -95,9 +99,16 @@ async def _seed_llm_gateway() -> None:
         for policy_id, project_id, task_type, ep_id in policies:
             existing_pol = (
                 await session.execute(
-                    select(LLMModelPolicy).where(LLMModelPolicy.policy_id == policy_id)
+                    select(LLMModelPolicy)
+                    .where(
+                        LLMModelPolicy.policy_id == policy_id,
+                        LLMModelPolicy.project_id == project_id,
+                        LLMModelPolicy.env == "dev",
+                        LLMModelPolicy.task_type == task_type,
+                    )
+                    .order_by(LLMModelPolicy.id)
                 )
-            ).scalar_one_or_none()
+            ).scalars().first()
             if existing_pol is not None:
                 continue
             session.add(
@@ -209,6 +220,62 @@ async def seed_dev_data() -> None:
                 prompt_key="finance.topic.generator",
                 prompt_version="v1",
                 model_policy_id="finance_topic_gen",
+                rag_enabled=False,
+                rag_policy_id=None,
+                enabled=True,
+            ),
+        )
+        await upsert_task_config(
+            session,
+            "finance_media",
+            "dev",
+            "article_writer",
+            TaskConfigUpsert(
+                prompt_key="article_writer",
+                prompt_version="v1",
+                model_policy_id="finance_article_writer",
+                rag_enabled=True,
+                rag_policy_id="finance_news_rag",
+                enabled=True,
+            ),
+        )
+        await upsert_task_config(
+            session,
+            "finance_media",
+            "dev",
+            "article_reviser",
+            TaskConfigUpsert(
+                prompt_key="article_reviser",
+                prompt_version="v1",
+                model_policy_id="finance_article_reviser",
+                rag_enabled=False,
+                rag_policy_id=None,
+                enabled=True,
+            ),
+        )
+        await upsert_task_config(
+            session,
+            "finance_media",
+            "dev",
+            "xhs_copy_writer",
+            TaskConfigUpsert(
+                prompt_key="xhs_copy_writer",
+                prompt_version="v1",
+                model_policy_id="finance_xhs_copy_writer",
+                rag_enabled=False,
+                rag_policy_id=None,
+                enabled=True,
+            ),
+        )
+        await upsert_task_config(
+            session,
+            "finance_media",
+            "dev",
+            "image_prompt_extractor",
+            TaskConfigUpsert(
+                prompt_key="image_prompt_extractor",
+                prompt_version="v1",
+                model_policy_id="finance_image_prompt_json",
                 rag_enabled=False,
                 rag_policy_id=None,
                 enabled=True,
@@ -459,6 +526,8 @@ async def seed_dev_data() -> None:
             metadata={"source": "seed", "published_at": "2026-06-13"},
         )
     )
+    async with SessionLocal() as session:
+        await backfill_embeddings(session)
     await _ensure_document(
         DocumentCreate(
             project_id="aigc_rtc",
