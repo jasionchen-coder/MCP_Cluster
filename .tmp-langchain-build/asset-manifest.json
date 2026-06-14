@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.aade6c59.css",
+    "main.js": "/static/js/main.05915200.js",
+    "static/media/mobileBg.png": "/static/media/mobileBg.f7d73bd1dcfed0a86ce4.png",
+    "static/media/userAvatar.png": "/static/media/userAvatar.aa8c70ad009754a050a8.png",
+    "static/media/Phone.svg": "/static/media/Phone.f320f43e0a3ffa1ff52250858e77e4c6.svg",
+    "static/media/MicClose.svg": "/static/media/MicClose.0592e9fcd0a6f84f752554434e497779.svg",
+    "static/media/CallWrapper.svg": "/static/media/CallWrapper.b08d41fa5e19381069207fd37a7001d4.svg",
+    "static/media/MicOpen.svg": "/static/media/MicOpen.a945bd5abebb9fcc607c3e1341bae01a.svg",
+    "static/media/CustomerService.svg": "/static/media/CustomerService.f07575aaa9e2858267c1eade3cde5af3.svg",
+    "static/media/LeaveRoom.svg": "/static/media/LeaveRoom.2ab1650c32c47218600722a18f0e7687.svg",
+    "static/media/ScreenOn.svg": "/static/media/ScreenOn.ade39568186d0bd89a979ee4bbfb39fe.svg",
+    "static/media/CameraCloseNote.svg": "/static/media/CameraCloseNote.6466156e94a674fcfce2c13f4493b10e.svg",
+    "static/media/ScreenCloseNote.svg": "/static/media/ScreenCloseNote.f19c715713c5515a76e63c3824875127.svg",
+    "static/media/setLocalPlayer.svg": "/static/media/setLocalPlayer.5cf8f5b9fe8394d4e0e1b62d7b48c8ff.svg",
+    "static/media/ScreenOff.svg": "/static/media/ScreenOff.4d25171ac1a730b214ea6b3ae00d8d1a.svg",
+    "static/media/CameraOpen.svg": "/static/media/CameraOpen.fb499033ae61a6c7d16dd265c29381f9.svg",
+    "static/media/CameraClose.svg": "/static/media/CameraClose.3477d1ebf2eac1aa2e39d0af3826434b.svg",
+    "index.html": "/index.html",
+    "main.aade6c59.css.map": "/static/css/main.aade6c59.css.map",
+    "main.05915200.js.map": "/static/js/main.05915200.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aade6c59.css",
+    "static/js/main.05915200.js"
+  ]
+}

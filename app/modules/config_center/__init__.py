@@ -1,0 +1,1 @@
+"""Config Center module."""
