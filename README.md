@@ -10,6 +10,20 @@ uv --cache-dir .uv-cache run python -m pytest -v
 uv --cache-dir .uv-cache run uvicorn app.main:app --host 0.0.0.0 --port 8400 --reload
 ```
 
+前端控制台：
+
+```powershell
+cd frontend
+npm install
+npm run dev -- --host 0.0.0.0 --port 5173
+```
+
+默认访问地址：
+
+```text
+http://localhost:5173
+```
+
 初始化开发数据：
 
 ```powershell

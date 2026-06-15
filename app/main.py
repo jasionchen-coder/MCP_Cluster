@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.modules.config_center.router import router as config_center_router
@@ -25,6 +26,13 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.middleware("http")(trace_middleware)
 app.add_exception_handler(APIError, api_error_handler)
 app.add_exception_handler(StarletteHTTPException, http_error_handler)
